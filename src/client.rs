@@ -5,7 +5,11 @@ use std::time;
 
 fn main() -> Result<(), Box<dyn std::error::Error>> {
     let mut stream = TcpStream::connect("127.0.0.1:8080")?;
-    stream.write(&b"Hello abc 123".repeat(1005))?;
+
+    let request_header: String = "GET /path HTTP/1.1\r\nHost: example.com\r\nUser-Agent: Mozilla/5.0\r\n\r\n".to_string();
+    let request_content: String = "Hello World".to_string();
+    let request: String = request_header + &request_content;
+    stream.write(request.as_bytes())?;
 
     let ms = time::Duration::from_millis(5000);
     sleep(ms);
